@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = von_dutch
-build_property.ProjectDir = C:\Users\never\RiderProjects\von-dutch\von-dutch\
+build_property.ProjectDir = /Users/mac/projects/c sharp projects/von-dutch/von-dutch/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

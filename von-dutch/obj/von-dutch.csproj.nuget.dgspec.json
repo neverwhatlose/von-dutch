@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\never\\RiderProjects\\von-dutch\\von-dutch\\von-dutch.csproj": {}
+    "/Users/mac/projects/c sharp projects/von-dutch/von-dutch/von-dutch.csproj": {}
   },
   "projects": {
-    "C:\\Users\\never\\RiderProjects\\von-dutch\\von-dutch\\von-dutch.csproj": {
+    "/Users/mac/projects/c sharp projects/von-dutch/von-dutch/von-dutch.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\never\\RiderProjects\\von-dutch\\von-dutch\\von-dutch.csproj",
+        "projectUniqueName": "/Users/mac/projects/c sharp projects/von-dutch/von-dutch/von-dutch.csproj",
         "projectName": "von-dutch",
-        "projectPath": "C:\\Users\\never\\RiderProjects\\von-dutch\\von-dutch\\von-dutch.csproj",
-        "packagesPath": "C:\\Users\\never\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\never\\RiderProjects\\von-dutch\\von-dutch\\obj\\",
+        "projectPath": "/Users/mac/projects/c sharp projects/von-dutch/von-dutch/von-dutch.csproj",
+        "packagesPath": "/Users/mac/.nuget/packages/",
+        "outputPath": "/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\never\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mac/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\never\\.dotnet\\sdk\\8.0.406/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.402/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

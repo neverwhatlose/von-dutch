@@ -1,29 +1,58 @@
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\von-dutch.exe
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\von-dutch.deps.json
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\von-dutch.runtimeconfig.json
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\von-dutch.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\von-dutch.pdb
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\Spectre.Console.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\Spectre.Console.Cli.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\de\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\es\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\fr\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\it\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\ja\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\ko\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\pt\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\ru\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\sv\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\bin\Debug\net8.0\zh-Hans\Spectre.Console.Cli.resources.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.csproj.AssemblyReference.cache
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.AssemblyInfoInputs.cache
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.AssemblyInfo.cs
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.csproj.CoreCompileInputs.cache
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.sourcelink.json
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.csproj.Up2Date
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\refint\von-dutch.dll
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.pdb
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\von-dutch.genruntimeconfig.cache
-C:\Users\never\RiderProjects\von-dutch\von-dutch\obj\Debug\net8.0\ref\von-dutch.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.exe
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.deps.json
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.runtimeconfig.json
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.pdb
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/Spectre.Console.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/Spectre.Console.Cli.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/de/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/es/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/fr/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/it/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/ja/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/ko/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/pt/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/ru/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/sv/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/bin/Debug/net8.0/zh-Hans/Spectre.Console.Cli.resources.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.csproj.AssemblyReference.cache
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.AssemblyInfoInputs.cache
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.AssemblyInfo.cs
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.csproj.CoreCompileInputs.cache
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.sourcelink.json
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.csproj.Up2Date
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/refint/von-dutch.dll
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.pdb
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.genruntimeconfig.cache
+C:/Users/never/RiderProjects/von-dutch/von-dutch/obj/Debug/net8.0/ref/von-dutch.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.deps.json
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.runtimeconfig.json
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/von-dutch.pdb
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/Spectre.Console.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/Spectre.Console.Cli.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/de/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/es/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/fr/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/it/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/ja/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/ko/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/pt/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/ru/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/sv/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/bin/Debug/net8.0/zh-Hans/Spectre.Console.Cli.resources.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.csproj.AssemblyReference.cache
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.AssemblyInfoInputs.cache
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.AssemblyInfo.cs
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.csproj.CoreCompileInputs.cache
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.sourcelink.json
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.csproj.Up2Date
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/refint/von-dutch.dll
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.pdb
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/von-dutch.genruntimeconfig.cache
+/Users/mac/projects/c sharp projects/von-dutch/von-dutch/obj/Debug/net8.0/ref/von-dutch.dll

@@ -107,6 +107,10 @@ namespace von_dutch
                 string context = File.ReadAllText(Path.Combine(path, fileName));
                 return JsonSerializer.Deserialize<Dictionary<TK, TV>>(context);
             }
+            catch (FileNotFoundException)
+            {
+                return null;
+            }
             catch (Exception ex)
             {
                 AnsiConsole.MarkupLine($"[grey][red]Ошибка:[/] При десериализации словаря {fileName} возникла ошибка: {ex.Message}[/]");

@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "h6HhqmZwyGM=",
+  "dgSpecHash": "stivvftmAMc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\never\\RiderProjects\\von-dutch\\von-dutch\\von-dutch.csproj",
+  "projectFilePath": "/Users/mac/projects/c sharp projects/von-dutch/von-dutch/von-dutch.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\never\\.nuget\\packages\\spectre.console\\0.49.2-preview.0.76\\spectre.console.0.49.2-preview.0.76.nupkg.sha512",
-    "C:\\Users\\never\\.nuget\\packages\\spectre.console.cli\\0.49.2-preview.0.76\\spectre.console.cli.0.49.2-preview.0.76.nupkg.sha512"
+    "/Users/mac/.nuget/packages/spectre.console/0.49.2-preview.0.76/spectre.console.0.49.2-preview.0.76.nupkg.sha512",
+    "/Users/mac/.nuget/packages/spectre.console.cli/0.49.2-preview.0.76/spectre.console.cli.0.49.2-preview.0.76.nupkg.sha512"
   ],
   "logs": []
 }
