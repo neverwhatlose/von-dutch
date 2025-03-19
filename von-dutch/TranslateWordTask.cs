@@ -14,6 +14,7 @@ namespace von_dutch
             AnsiConsole.Write(new FigletText("VON DUTCH").LeftJustified().Color(Color.Blue));
 
             Dictionary<string, object>? selectedDict = SelectDictionary(context);
+            
             if (selectedDict == null)
             {
                 return;
@@ -23,12 +24,12 @@ namespace von_dutch
             
             if (word == null)
             {
-                TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                TerminalUi.DisplayMessageWaiting("Операция отменена.", Color.Yellow);
                 return;
             }
             if (word.Trim().Length == 0)
             {
-                TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                TerminalUi.DisplayMessageWaiting("Слово не может быть пустым", Color.Red);
                 return;
             }
 
@@ -52,13 +53,63 @@ namespace von_dutch
                         TerminalUi.DisplayMessage($"Перевод слова: {word} - " + element1.GetString(), Color.Green);
                         break;
                     default:
-                        TerminalUi.DisplayMessage("Неподдерживаемый формат перевода", Color.Red);
+                        TerminalUi.DisplayMessageWaiting("Неподдерживаемый формат перевода", Color.Red);
                         break;
                 }
+                
+                HistoryManager.Instance.Log(
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    GetDictName(selectedDict, context),
+                    word,
+                    TerminalUiExtensions.GetTranslationAsString(translation),
+                    "✅"
+                    );
+                
+                bool changeTranslation = AnsiConsole.Prompt(
+                    new SelectionPrompt<bool>()
+                        .Title("[grey]Считаете ли вы нужным отредактировать перевод?[/]")
+                        .HighlightStyle(new Style(foreground: Color.Green))
+                        .MoreChoicesText("[grey](Используйте стрелки для выбора)[/]")
+                        .AddChoices(true, false)
+                        .UseConverter(value => value ? "Да" : "Нет")
+                );
+                
+                if (!changeTranslation)
+                {
+                    return;
+                }
+
+                EditTranslationSubTask editTranslationSubTask = new(word, selectedDict);
+                editTranslationSubTask.Execute(context);
             }
             else
             {
                 TerminalUi.DisplayMessage("Слово " + word + " не найдено в словаре", Color.Red);
+                
+                HistoryManager.Instance.Log(
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    GetDictName(selectedDict, context),
+                    word,
+                    string.Empty,
+                    "❌"
+                );
+                
+                bool changeTranslation = AnsiConsole.Prompt(
+                    new SelectionPrompt<bool>()
+                        .Title("[grey]Хотите добавить это слово в словарь?[/]")
+                        .HighlightStyle(new Style(foreground: Color.Green))
+                        .MoreChoicesText("[grey](Используйте стрелки для выбора)[/]")
+                        .AddChoices(true, false)
+                        .UseConverter(value => value ? "Да" : "Нет")
+                );
+
+                if (!changeTranslation)
+                {
+                    return;
+                }
+
+                AddWordSubTask addWordSubTask = new(word, selectedDict);
+                addWordSubTask.Execute(context);
             }
         }
     }

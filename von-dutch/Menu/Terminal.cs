@@ -2,23 +2,21 @@
 
 namespace von_dutch.Menu
 {
-
-/*
- * про временный стек изменений
- * я думаю есть смысл копировать файлы словарей во временную папку
- * и изменять их там, а затем просто перезаписывать словари
- */
     public class Terminal
     {
-        private readonly List<TaskCore> _handlers = [
+        private readonly List<TaskCore> _handlers =
+        [
             new LoadDictTask(),
             new TranslateWordTask(),
             new AddWordTask(),
             new EditWordTask(),
+            new AdvancedTranslationTask(),
+            new ContextualTranslationTask(),
             new ShowDictInfoTask(),
+            new ShowTranslationHistory(),
             new ExitTask()
         ];
-        
+
         private readonly AppContext _context = new();
 
         public void Run()
@@ -26,13 +24,14 @@ namespace von_dutch.Menu
             while (true)
             {
                 TaskCore selectedTask = TerminalUi.ShowMainMenu(_handlers);
-                
+
                 if (selectedTask.NeedsData && !_context.IsDataLoaded)
                 {
-                    TerminalUi.DisplayMessage("Для выполнения этой операции необходимо загрузить словарь.", Color.Red);
+                    TerminalUi.DisplayMessageWaiting("Для выполнения этой операции необходимо загрузить словарь.",
+                        Color.Red);
                     continue;
                 }
-                
+
                 selectedTask.Execute(_context);
             }
         }

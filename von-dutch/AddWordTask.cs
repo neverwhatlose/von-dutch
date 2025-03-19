@@ -20,13 +20,13 @@ namespace von_dutch
             
             if (inputWord == null)
             {
-                TerminalUi.DisplayMessage("Операция отменена. Возврат в главное меню.", Color.Yellow);
+                TerminalUi.DisplayMessageWaiting("Операция отменена. Возврат в главное меню.", Color.Yellow);
                 return;
             }
             
             if (inputWord.Trim().Length == 0)
             {
-                TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                TerminalUi.DisplayMessageWaiting("Слово не может быть пустым", Color.Red);
                 return;
             }
 
@@ -34,18 +34,18 @@ namespace von_dutch
             
             if (inputTranslation == null)
             {
-                TerminalUi.DisplayMessage("Операция отменена. Возврат в главное меню.", Color.Yellow);
+                TerminalUi.DisplayMessageWaiting("Операция отменена. Возврат в главное меню.", Color.Yellow);
                 return;
             }
             
             if (inputTranslation.Trim().Length == 0)
             {
-                TerminalUi.DisplayMessage("Перевод не может быть пустым", Color.Red);
+                TerminalUi.DisplayMessageWaiting("Перевод не может быть пустым", Color.Red);
                 return;
             }
 
             selectedDict[inputWord] = inputTranslation;
-            TerminalUi.DisplayMessage("Слово успешно добавлено!", Color.Green);
+            TerminalUi.DisplayMessageWaiting("Слово успешно добавлено!", Color.Green);
 
             DataController.UpdateData(context);
         }

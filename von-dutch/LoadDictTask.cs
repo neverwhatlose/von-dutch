@@ -18,13 +18,13 @@ namespace von_dutch
             
             if (dataPath == null)
             {
-                TerminalUi.DisplayMessage("Операция отменена. Возврат в главное меню.", Color.Yellow);
+                TerminalUi.DisplayMessageWaiting("Операция отменена. Возврат в главное меню.", Color.Yellow);
                 return;
             }
             
             if (dataPath.Trim().Length == 0)
             {
-                TerminalUi.DisplayMessage("Путь не может быть пустым", Color.Red);
+                TerminalUi.DisplayMessageWaiting("Путь не может быть пустым", Color.Red);
                 return;
             }
 
@@ -33,19 +33,19 @@ namespace von_dutch
                 DirectoryInfo dir = new(dataPath);
                 if (!dir.Exists)
                 {
-                    TerminalUi.DisplayMessage("Указанная папка не существует", Color.Red);
+                    TerminalUi.DisplayMessageWaiting("Указанная папка не существует", Color.Red);
                     return;
                 }
 
                 if (!dir.GetFiles().Any(file => file.Name is "en-ru.json" or "es-en.json" or "fr-ru.json"))
                 {
-                    TerminalUi.DisplayMessage("Нет ни одного доступного словаря", Color.Red);
+                    TerminalUi.DisplayMessageWaiting("Нет ни одного доступного словаря", Color.Red);
                     return;
                 }
             }
             catch (Exception ex)
             {
-                TerminalUi.DisplayMessage("Ошибка: " + ex.Message, Color.Red);
+                TerminalUi.DisplayMessageWaiting("Ошибка: " + ex.Message, Color.Red);
                 return;
             }
 
@@ -53,12 +53,12 @@ namespace von_dutch
             DataController.LoadData(context);
             if (context.EngRusDict != null || context.EspEngDict != null || context.FreRusDict != null)
             {
-                TerminalUi.DisplayMessage("Словари успешно загружены", Color.Green);
+                TerminalUi.DisplayMessageWaiting("Словари успешно загружены", Color.Green);
                 context.IsDataLoaded = true;
             }
             else
             {
-                TerminalUi.DisplayMessage("При загрузке словарей произошла ошибка", Color.Red);
+                TerminalUi.DisplayMessageWaiting("При загрузке словарей произошла ошибка", Color.Red);
             }
         }
     }

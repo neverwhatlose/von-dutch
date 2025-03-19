@@ -44,8 +44,34 @@ namespace von_dutch
                 );
             }
 
-            TerminalUi.DisplayMessage("Нет доступных словарей", Color.Red);
+            TerminalUi.DisplayMessageWaiting("Нет доступных словарей", Color.Red);
             return null;
+        }
+        
+        protected string GetDictName(Dictionary<string, object> dict, AppContext context)
+        {
+            foreach (PropertyInfo property in context.GetType().GetProperties())
+            {
+                if (property.PropertyType != typeof(Dictionary<string, object>))
+                {
+                    continue;
+                }
+
+                if (property.GetValue(context) is not Dictionary<string, object> dictValue)
+                {
+                    continue;
+                }
+
+                if (dictValue != dict)
+                {
+                    continue;
+                }
+
+                DictFileAttribute? attr = property.GetCustomAttribute<DictFileAttribute>();
+                return attr != null ? attr.FileName : property.Name;
+            }
+
+            return "Unknown";
         }
     }
 }

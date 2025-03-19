@@ -20,19 +20,19 @@ namespace von_dutch
             
             if (wordToEdit == null)
             {
-                TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                TerminalUi.DisplayMessageWaiting("Операция отменена.", Color.Yellow);
                 return;
             }
             
             if (wordToEdit.Trim().Length == 0)
             {
-                TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                TerminalUi.DisplayMessageWaiting("Слово не может быть пустым", Color.Red);
                 return;
             }
 
             if (!selectedDict.ContainsKey(wordToEdit))
             {
-                TerminalUi.DisplayMessage("Слово не найдено в словаре", Color.Red);
+                TerminalUi.DisplayMessageWaiting("Слово не найдено в словаре", Color.Red);
                 return;
             }
 
@@ -52,20 +52,20 @@ namespace von_dutch
                         
                         if (newWord == null)
                         {
-                            TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                            TerminalUi.DisplayMessageWaiting("Операция отменена.", Color.Yellow);
                             return;
                         }
                         
                         if (newWord.Trim().Length == 0)
                         {
-                            TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                            TerminalUi.DisplayMessageWaiting("Слово не может быть пустым", Color.Red);
                             return;
                         }
                         
                         object value = selectedDict[wordToEdit];
                         selectedDict[newWord] = value;
                         selectedDict.Remove(wordToEdit);
-                        TerminalUi.DisplayMessage("Слово успешно изменено!", Color.Green);
+                        TerminalUi.DisplayMessageWaiting("Слово успешно изменено!", Color.Green);
                         break;
                     }
                 
@@ -75,24 +75,24 @@ namespace von_dutch
                         
                         if (translation == null)
                         {
-                            TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                            TerminalUi.DisplayMessageWaiting("Операция отменена.", Color.Yellow);
                             return;
                         }
                         
                         if (translation.Trim().Length == 0)
                         {
-                            TerminalUi.DisplayMessage("Перевод не может быть пустым", Color.Red);
+                            TerminalUi.DisplayMessageWaiting("Перевод не может быть пустым", Color.Red);
                             return;
                         }
                         
                         selectedDict[wordToEdit] = translation;
-                        TerminalUi.DisplayMessage("Перевод успешно изменен!", Color.Green);
+                        TerminalUi.DisplayMessageWaiting("Перевод успешно изменен!", Color.Green);
                         break;
                     }
                 case "Удалить слово":
                     {
                         selectedDict.Remove(wordToEdit);
-                        TerminalUi.DisplayMessage("Слово успешно удалено!", Color.Green);
+                        TerminalUi.DisplayMessageWaiting("Слово успешно удалено!", Color.Green);
                         break;
                     }
             }
