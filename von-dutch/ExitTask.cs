@@ -9,15 +9,10 @@ namespace von_dutch
 
         public override void Execute(AppContext context)
         {
-            AnsiConsole.MarkupLine("[green]Сохранение данных...[/]");
-            
-            // апдейтим на случай если я забыл что-то заапдейтить
-            DataController.UpdateData(context);
-            
+            // меня бесит то что тут ожидается ввод от пользователя из-за DisplayMessage
+            TerminalUi.DisplayMessage("Сохранение данных...", Color.Green);
             DataController.SaveData(context);
-            
-            AnsiConsole.MarkupLine("[green]Данные успешно сохранены![/]");
-
+            TerminalUi.DisplayMessage("Данные успешно сохранены!", Color.Green);
             Environment.Exit(0);
         }
     }

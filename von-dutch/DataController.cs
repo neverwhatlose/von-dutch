@@ -7,7 +7,7 @@ namespace von_dutch
 {
     public static class DataController
     {
-        private static readonly string DictPath = Path.Combine(GetDirectoryPath(), $"Dictionaries");
+        private static readonly string DictPath = Path.Combine(GetDirectoryPath(), "Dictionaries");
         
         public static void SaveData(AppContext context)
         {
@@ -122,7 +122,7 @@ namespace von_dutch
             }
         }
         
-        public static string GetDirectoryPath()
+        private static string GetDirectoryPath()
         {
             string[] directories = Directory.GetCurrentDirectory().Split(Path.DirectorySeparatorChar);
             return string.Join(Path.DirectorySeparatorChar, directories,

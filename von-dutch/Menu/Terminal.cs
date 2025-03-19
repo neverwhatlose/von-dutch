@@ -15,6 +15,7 @@ namespace von_dutch.Menu
             new TranslateWordTask(),
             new AddWordTask(),
             new EditWordTask(),
+            new ShowDictInfoTask(),
             new ExitTask()
         ];
         
@@ -24,28 +25,15 @@ namespace von_dutch.Menu
         {
             while (true)
             {
-                Console.Clear();
-
-                AnsiConsole.Write(new FigletText("VON DUTCH").LeftJustified().Color(Color.Blue));
-
-                TaskCore choice = AnsiConsole.Prompt(
-                    new SelectionPrompt<TaskCore>()
-                        .Title("Добро пожаловать в словарь [green]Von Dutch![/]")
-                        .PageSize(10)
-                        .HighlightStyle(new Style(foreground: Color.Grey))
-                        .MoreChoicesText("[grey](Нажимайте 🔼 и 🔽, чтобы открыть больше команд)[/]")
-                        .AddChoices(_handlers)
-                        .UseConverter(task => task.Title)
-                );
+                TaskCore selectedTask = TerminalUi.ShowMainMenu(_handlers);
                 
-                if (choice.NeedsData && !_context.IsDataLoaded)
+                if (selectedTask.NeedsData && !_context.IsDataLoaded)
                 {
-                    AnsiConsole.MarkupLine("[red]Для выполнения этой команды необходимо загрузить данные[/]");
-                    Console.ReadKey();
+                    TerminalUi.DisplayMessage("Для выполнения этой операции необходимо загрузить словарь.", Color.Red);
                     continue;
                 }
-                choice.Execute(_context);
-                Console.ReadKey();
+                
+                selectedTask.Execute(_context);
             }
         }
     }

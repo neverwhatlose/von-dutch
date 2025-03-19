@@ -1,17 +1,15 @@
-﻿using Spectre.Console;
-using System.Reflection;
+﻿using System.Reflection;
+using Spectre.Console;
 
 namespace von_dutch
 {
     public abstract class TaskCore
     {
-        public virtual bool NeedsData => false;
-        
         public abstract string Title { get; }
-        
+        public virtual bool NeedsData { get; } = false;
         public abstract void Execute(AppContext context);
         
-        protected Dictionary<string, object> SelectDictionary(AppContext context)
+        protected static Dictionary<string, object>? SelectDictionary(AppContext context)
         {
             List<Dictionary<string, object>> availableDicts = [];
             Dictionary<Dictionary<string, object>, string> dictNames = [];
@@ -34,15 +32,20 @@ namespace von_dutch
                 dictNames[dict] = displayName;
             }
 
-            return AnsiConsole.Prompt(
-                new SelectionPrompt<Dictionary<string, object>>()
-                    .Title("[grey]Выберите доступный словарь[/]")
-                    .HighlightStyle(new Style(foreground: Color.Green))
-                    .MoreChoicesText("[grey](Нажимайте 🔼 и 🔽, чтобы открыть больше список)[/]")
-                    .AddChoices(availableDicts)
-                    .UseConverter(dict => dictNames[dict])
-            );
-        }
+            if (availableDicts.Count != 0)
+            {
+                return AnsiConsole.Prompt(
+                    new SelectionPrompt<Dictionary<string, object>>()
+                        .Title("[grey]Выберите доступный словарь[/]")
+                        .HighlightStyle(new Style(foreground: Color.Green))
+                        .MoreChoicesText("[grey](Нажимайте 🔼 и 🔽, чтобы открыть больше список)[/]")
+                        .AddChoices(availableDicts)
+                        .UseConverter(dict => dictNames[dict])
+                );
+            }
 
+            TerminalUi.DisplayMessage("Нет доступных словарей", Color.Red);
+            return null;
+        }
     }
 }

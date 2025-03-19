@@ -1,5 +1,5 @@
-using Spectre.Console;
 using System.Text.Json;
+using Spectre.Console;
 
 namespace von_dutch
 {
@@ -11,43 +11,54 @@ namespace von_dutch
         public override void Execute(AppContext context)
         {
             Console.Clear();
-            
             AnsiConsole.Write(new FigletText("VON DUTCH").LeftJustified().Color(Color.Blue));
 
-            Dictionary<string, object> selectedDict = SelectDictionary(context);
+            Dictionary<string, object>? selectedDict = SelectDictionary(context);
+            if (selectedDict == null)
+            {
+                return;
+            }
 
-            string word = AnsiConsole.Prompt(
-                new TextPrompt<string>("[green]Введите слово[/]")
-                    .Validate(word => word.Length == 0 || string.IsNullOrWhiteSpace(word) ? ValidationResult.Error("[red]Слово не может быть пустым[/]") : ValidationResult.Success()));
+            string? word = TerminalUi.PromptText("[green]Введите слово для перевода[/]");
             
-            
-            // Нужно проверить чем является translation
-            // 1. если строка, то просто вывести
-            // 2. если массив, то вывести все элементы
+            if (word == null)
+            {
+                TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                return;
+            }
+            if (word.Trim().Length == 0)
+            {
+                TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                return;
+            }
+
             if (selectedDict.TryGetValue(word, out object? translation))
             {
                 switch (translation)
                 {
-                    case string ans:
-                        AnsiConsole.MarkupLine($"[green]Перевод слова[/]: {word} - {ans}");
+                    case string value:
+                        TerminalUi.DisplayMessage($"Перевод слова: {word} - " + value, Color.Green);
                         break;
                     case JsonElement { ValueKind: JsonValueKind.Array } jsonElement:
                         {
                             foreach (JsonElement element in jsonElement.EnumerateArray())
                             {
-                                AnsiConsole.MarkupLine($"[green]Перевод слова[/]: {word} - {element.GetString()}");
+                                TerminalUi.DisplayMessage($"Перевод слова: {word} - " + element.GetString(), Color.Green);
                             }
 
                             break;
                         }
-                    case JsonElement jsonElement:
-                        AnsiConsole.MarkupLine($"[green]Перевод слова[/]: {word} - {jsonElement.GetString()}");
+                    case JsonElement element1:
+                        TerminalUi.DisplayMessage($"Перевод слова: {word} - " + element1.GetString(), Color.Green);
+                        break;
+                    default:
+                        TerminalUi.DisplayMessage("Неподдерживаемый формат перевода", Color.Red);
                         break;
                 }
             }
             else
             {
-                AnsiConsole.MarkupLine($"[red]Слово[/] {word} [red]не найдено в словаре[/]");
+                TerminalUi.DisplayMessage("Слово " + word + " не найдено в словаре", Color.Red);
             }
         }
     }

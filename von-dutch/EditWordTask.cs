@@ -4,20 +4,35 @@ namespace von_dutch
 {
     public class EditWordTask : TaskCore
     {
-        public override bool NeedsData { get; } = true;
         public override string Title { get; } = "Редактирование слова";
+        public override bool NeedsData { get; } = true;
 
         public override void Execute(AppContext context)
         {
-            Dictionary<string, object> selectedDict = SelectDictionary(context);
+            Dictionary<string, object>? selectedDict = SelectDictionary(context);
             
-            string wordToEdit = AnsiConsole.Prompt(
-                new TextPrompt<string>("[green]Введите слово[/]")
-                    .Validate(word => word.Length == 0 || string.IsNullOrWhiteSpace(word) ? ValidationResult.Error("[red]Слово не может быть пустым[/]") : ValidationResult.Success()));
-
-            if (!selectedDict.TryGetValue(wordToEdit, out object? value))
+            if (selectedDict == null)
             {
-                AnsiConsole.MarkupLine("[red]Слово не найдено в словаре[/]");
+                return;
+            }
+
+            string? wordToEdit = TerminalUi.PromptText("[green]Введите слово для редактирования[/]");
+            
+            if (wordToEdit == null)
+            {
+                TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                return;
+            }
+            
+            if (wordToEdit.Trim().Length == 0)
+            {
+                TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                return;
+            }
+
+            if (!selectedDict.ContainsKey(wordToEdit))
+            {
+                TerminalUi.DisplayMessage("Слово не найдено в словаре", Color.Red);
                 return;
             }
 
@@ -25,39 +40,63 @@ namespace von_dutch
                 new SelectionPrompt<string>()
                     .Title("[grey]Выберите действие[/]")
                     .HighlightStyle(new Style(foreground: Color.Green))
-                    .MoreChoicesText("[grey](Нажимайте 🔼 и 🔽, чтобы открыть больше список)[/]")
+                    .MoreChoicesText("[grey](Используйте стрелки для навигации)[/]")
                     .AddChoices("Изменить слово", "Изменить перевод", "Удалить слово")
             );
-            
+
             switch (choice)
             {
                 case "Изменить слово":
-                {
-                    string newWord = AnsiConsole.Prompt(
-                        new TextPrompt<string>("[green]Введите новое слово[/]")
-                            .Validate(word => word.Length == 0 || string.IsNullOrWhiteSpace(word) ? ValidationResult.Error("[red]Слово не может быть пустым[/]") : ValidationResult.Success()));
-                    selectedDict[newWord] = value;
-                    selectedDict.Remove(wordToEdit);
-                    AnsiConsole.MarkupLine("[green]Слово успешно изменено![/]");
-                    break;
-                }
+                    {
+                        string? newWord = TerminalUi.PromptText("[green]Введите новое слово[/]");
+                        
+                        if (newWord == null)
+                        {
+                            TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                            return;
+                        }
+                        
+                        if (newWord.Trim().Length == 0)
+                        {
+                            TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                            return;
+                        }
+                        
+                        object value = selectedDict[wordToEdit];
+                        selectedDict[newWord] = value;
+                        selectedDict.Remove(wordToEdit);
+                        TerminalUi.DisplayMessage("Слово успешно изменено!", Color.Green);
+                        break;
+                    }
+                
                 case "Изменить перевод":
-                {
-                    string translation = AnsiConsole.Prompt(
-                        new TextPrompt<string>($"[green]Введите новый перевод для {wordToEdit}[/]")
-                            .Validate(translation => translation.Length == 0 || string.IsNullOrWhiteSpace(translation) ? ValidationResult.Error("[red]Слово не может быть пустым[/]") : ValidationResult.Success()));
-                    selectedDict[wordToEdit] = translation;
-                    AnsiConsole.MarkupLine("[green]Перевод успешно изменен![/]");
-                    break;
-                }
+                    {
+                        string? translation = TerminalUi.PromptText("[green]Введите новый перевод для " + wordToEdit + "[/]");
+                        
+                        if (translation == null)
+                        {
+                            TerminalUi.DisplayMessage("Операция отменена.", Color.Yellow);
+                            return;
+                        }
+                        
+                        if (translation.Trim().Length == 0)
+                        {
+                            TerminalUi.DisplayMessage("Перевод не может быть пустым", Color.Red);
+                            return;
+                        }
+                        
+                        selectedDict[wordToEdit] = translation;
+                        TerminalUi.DisplayMessage("Перевод успешно изменен!", Color.Green);
+                        break;
+                    }
                 case "Удалить слово":
-                {
-                    selectedDict.Remove(wordToEdit);
-                    AnsiConsole.MarkupLine("[green]Слово успешно удалено![/]");
-                    break;
-                }
+                    {
+                        selectedDict.Remove(wordToEdit);
+                        TerminalUi.DisplayMessage("Слово успешно удалено!", Color.Green);
+                        break;
+                    }
             }
-            
+
             DataController.UpdateData(context);
         }
     }

@@ -9,19 +9,44 @@ namespace von_dutch
 
         public override void Execute(AppContext context)
         {
-            Dictionary<string, object> selectedDict = SelectDictionary(context);
+            Dictionary<string, object>? selectedDict = SelectDictionary(context);
             
-            string word = AnsiConsole.Prompt(
-                new TextPrompt<string>("[green]Введите слово[/]")
-                    .Validate(word => word.Length == 0 || string.IsNullOrWhiteSpace(word) ? ValidationResult.Error("[red]Слово не может быть пустым[/]") : ValidationResult.Success()));
+            if (selectedDict == null)
+            {
+                return;
+            }
+
+            string? inputWord = TerminalUi.PromptText("[green]Введите слово:[/]");
             
-            string translation = AnsiConsole.Prompt(
-                new TextPrompt<string>($"[green]Введите перевод для {word}[/]")
-                    .Validate(translation => translation.Length == 0 || string.IsNullOrWhiteSpace(word) ? ValidationResult.Error("[red]Слово не может быть пустым[/]") : ValidationResult.Success()));
+            if (inputWord == null)
+            {
+                TerminalUi.DisplayMessage("Операция отменена. Возврат в главное меню.", Color.Yellow);
+                return;
+            }
             
-            selectedDict[word] = translation;
-            AnsiConsole.MarkupLine("[green]Слово успешно добавлено![/]");
+            if (inputWord.Trim().Length == 0)
+            {
+                TerminalUi.DisplayMessage("Слово не может быть пустым", Color.Red);
+                return;
+            }
+
+            string? inputTranslation = TerminalUi.PromptText("[green]Введите перевод для " + inputWord + ":[/]");
             
+            if (inputTranslation == null)
+            {
+                TerminalUi.DisplayMessage("Операция отменена. Возврат в главное меню.", Color.Yellow);
+                return;
+            }
+            
+            if (inputTranslation.Trim().Length == 0)
+            {
+                TerminalUi.DisplayMessage("Перевод не может быть пустым", Color.Red);
+                return;
+            }
+
+            selectedDict[inputWord] = inputTranslation;
+            TerminalUi.DisplayMessage("Слово успешно добавлено!", Color.Green);
+
             DataController.UpdateData(context);
         }
     }
