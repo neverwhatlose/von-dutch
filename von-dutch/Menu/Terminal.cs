@@ -10,25 +10,12 @@ namespace von_dutch.Menu
  */
     public class Terminal
     {
-        // private readonly Dictionary<string, TaskCore> _handlers = new()
-        // {
-        //     { "Выбор текущей языковой пары", new LoadDictTask() },
-        //     { "Перевод слова", new LoadDictTask() },
-        //     { "Добавить новое слово", new LoadDictTask() },
-        //     { "Редактирование слова в словаре", new LoadDictTask() },
-        //     { "Удаление слова", new LoadDictTask() },
-        //     { "Сохранить изменения", new LoadDictTask() },
-        //     { "Завершить", new LoadDictTask() }
-        // };
-
         private readonly List<TaskCore> _handlers = [
             new LoadDictTask(),
             new TranslateWordTask(),
-            new LoadDictTask(),
-            new LoadDictTask(),
-            new LoadDictTask(),
-            new LoadDictTask(),
-            new LoadDictTask()
+            new AddWordTask(),
+            new EditWordTask(),
+            new ExitTask()
         ];
         
         private readonly AppContext _context = new();

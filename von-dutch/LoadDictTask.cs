@@ -85,10 +85,10 @@ namespace von_dutch
                 AnsiConsole.MarkupLine($"[grey][red]Ошибка:[/] {ex.Message}[/]");
                 return;
             }
+
+            context.DataPath = dataPath;
             
-            context.EngRusDict = LoadDict<string, object>(dataPath, "en-ru.json");
-            context.EspEngDict = LoadDict<string, object>(dataPath, "es-en.json");
-            context.FreRusDict = LoadDict<string, object>(dataPath, "fr-ru.json");
+            DataController.LoadData(context);
             
             if (context.EngRusDict is not null || context.EspEngDict is not null || context.FreRusDict is not null)
             {
@@ -98,24 +98,6 @@ namespace von_dutch
             }
 
             AnsiConsole.MarkupLine("[grey][red]Ошибка:[/] При загрузке словарей произошла ошибка.[/]");
-        }
-        
-        private static Dictionary<TK, TV>? LoadDict<TK, TV>(string path, string fileName) where TK : notnull
-        {
-            try
-            {
-                string context = File.ReadAllText(Path.Combine(path, fileName));
-                return JsonSerializer.Deserialize<Dictionary<TK, TV>>(context);
-            }
-            catch (FileNotFoundException)
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-                AnsiConsole.MarkupLine($"[grey][red]Ошибка:[/] При десериализации словаря {fileName} возникла ошибка: {ex.Message}[/]");
-                return null;
-            }
         }
     }
 }
