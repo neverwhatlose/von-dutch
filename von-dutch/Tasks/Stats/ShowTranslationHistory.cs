@@ -4,7 +4,7 @@ namespace von_dutch
 {
     public class ShowTranslationHistory : TaskCore
     {
-        public override string Title { get; } = "Показать историю переводов (NIY)";
+        public override string Title { get; } = "Показать историю переводов";
         public override bool NeedsData { get; } = true;
         
         public override void Execute(AppContext context)

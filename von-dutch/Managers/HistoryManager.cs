@@ -28,9 +28,9 @@ namespace von_dutch
         public static HistoryManager Instance => SingletonInstance.Value;
         private HistoryManager() { }
 
-        public List<List<string>> History { get; private set; } = [];
+        public List<List<string>> History { get; } = [];
 
-        public void Log(
+        public static void Log(
             string date,
             string dictionary,
             string word,
