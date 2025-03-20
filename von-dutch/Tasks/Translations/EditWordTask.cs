@@ -1,4 +1,5 @@
 using Spectre.Console;
+using System.Collections.Generic;
 
 namespace von_dutch
 {
@@ -35,6 +36,13 @@ namespace von_dutch
                 TerminalUi.DisplayMessageWaiting("Слово не найдено в словаре", Color.Red);
                 return;
             }
+            
+            TerminalUi.PrintTable(string.Empty, [
+                new TableColumn("[green]Слово[/]"),
+                new TableColumn("[green]Перевод[/]")
+            ], [
+                new List<string> { wordToEdit, TerminalUiExtensions.GetTranslationAsString(selectedDict[wordToEdit]) }
+            ]);
 
             string choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()

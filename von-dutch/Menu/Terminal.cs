@@ -14,25 +14,33 @@ namespace von_dutch.Menu
             new ContextualTranslationTask(),
             new ShowDictInfoTask(),
             new ShowTranslationHistory(),
-            new ExitTask()
+            new ExitTask(),
+            new GiftTask()
         ];
 
         private readonly AppContext _context = new();
 
         public void Run()
         {
-            while (true)
+            try
             {
-                TaskCore selectedTask = TerminalUi.ShowMainMenu(_handlers);
-
-                if (selectedTask.NeedsData && !_context.IsDataLoaded)
+                while (true)
                 {
-                    TerminalUi.DisplayMessageWaiting("Для выполнения этой операции необходимо загрузить словарь.",
-                        Color.Red);
-                    continue;
-                }
+                    TaskCore selectedTask = TerminalUi.ShowMainMenu(_handlers);
 
-                selectedTask.Execute(_context);
+                    if (selectedTask.NeedsData && !_context.IsDataLoaded)
+                    {
+                        TerminalUi.DisplayMessageWaiting("Для выполнения этой операции необходимо загрузить словарь.",
+                            Color.Red);
+                        continue;
+                    }
+
+                    selectedTask.Execute(_context);
+                }
+            }
+            catch
+            {
+                TerminalUi.DisplayMessage("Определенно возникла ошибка, о которой я не догадывался...", Color.Red);
             }
         }
     }

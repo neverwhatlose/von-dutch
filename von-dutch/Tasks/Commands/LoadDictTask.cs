@@ -7,12 +7,20 @@ namespace von_dutch
     {
         public override bool NeedsData { get; } = false;
         public override string Title { get; } = "Выбор текущей языковой пары";
+        
+        private string _loadedDataPath = string.Empty;
 
         public override void Execute(AppContext context)
         {
             Console.Clear();
             AnsiConsole.Write(new FigletText("VON DUTCH").LeftJustified().Color(Color.Blue));
-            AnsiConsole.MarkupLine("[grey]Введите путь к [green]папке[/] со словарями (нажмите [red]Esc[/] для отмены):[/]");
+            
+            TerminalUi.DisplayMessage("Введите путь к [green]папке[/] со словарями (нажмите [red]Esc[/] для отмены):", Color.Grey);
+            
+            if (!string.IsNullOrEmpty(_loadedDataPath))
+            {
+                TerminalUi.DisplayMessage("Обратите внимание! Словари уже загружены из папки: " + _loadedDataPath, Color.Yellow);
+            }
 
             string? dataPath = TerminalUi.PromptText("Папка должна содержать хотя бы один из файлов: [green]en-ru.json[/], [green]es-en.json[/], [green]fr-ru.json[/].");
             
@@ -50,6 +58,7 @@ namespace von_dutch
             }
 
             context.DataPath = dataPath;
+            _loadedDataPath = dataPath;
             DataController.LoadData(context);
             if (context.EngRusDict != null || context.EspEngDict != null || context.FreRusDict != null)
             {

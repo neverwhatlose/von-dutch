@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("von-dutch")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+beacdb8321febd24670d4736a368a9b789ebd65d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a91ca8b5c0d2ddeac61b27e41ef0e10cc8f15c3b")]
 [assembly: System.Reflection.AssemblyProductAttribute("von-dutch")]
 [assembly: System.Reflection.AssemblyTitleAttribute("von-dutch")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

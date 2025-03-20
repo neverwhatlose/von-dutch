@@ -5,10 +5,16 @@ namespace von_dutch
     public class AdvancedTranslationTask : TaskCore
     {
         public override string Title { get; } = "Продвинутый перевод фраз и предложений";
-        public override bool NeedsData { get; } = false;
+        public override bool NeedsData { get; } = true;
 
         public override void Execute(AppContext context)
         {
+            if (context.EngRusDict is null)
+            {
+                TerminalUi.DisplayMessageWaiting("Словарь en-ru.json не загружен. Возврат в главное меню.", Color.Red);
+                return;
+            }
+            
             GigaChatAiService aiService = GigaChatAiService.Instance;
 
             string? sentence = TerminalUi.PromptText("Введите [yellow]фразу[/] или [yellow]предложение[/]:");
