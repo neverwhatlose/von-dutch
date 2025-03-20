@@ -1,15 +1,35 @@
-﻿using System.Text;
-using Spectre.Console;
+﻿using Spectre.Console;
+using von_dutch.Managers;
+using von_dutch.Menu;
+using AppContext = von_dutch.Wrappers.AppContext;
 
-namespace von_dutch
+namespace von_dutch.Tasks.Commands
 {
+    /// <summary>
+    /// Класс, представляющий задачу выбора текущей языковой пары и загрузки словарей.
+    /// Наследуется от базового класса TaskCore.
+    /// </summary>
     public class LoadDictTask : TaskCore
     {
-        public override bool NeedsData { get; } = false;
+        /// <summary>
+        /// Заголовок задачи, отображаемый в интерфейсе.
+        /// </summary>
         public override string Title { get; } = "Выбор текущей языковой пары";
-        
+
+        /// <summary>
+        /// Флаг, указывающий, требует ли задача данные для выполнения.
+        /// </summary>
+        public override bool NeedsData { get; } = false;
+
         private string _loadedDataPath = string.Empty;
 
+        /// <summary>
+        /// Выполняет задачу выбора папки со словарями и загрузки данных.
+        /// </summary>
+        /// <param name="context">Контекст приложения, содержащий необходимые данные и состояние.</param>
+        /// <exception cref="System.Exception">
+        /// Может возникнуть при проверке существования папки или файлов.
+        /// </exception>
         public override void Execute(AppContext context)
         {
             Console.Clear();

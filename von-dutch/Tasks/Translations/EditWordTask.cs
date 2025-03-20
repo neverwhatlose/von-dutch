@@ -1,13 +1,36 @@
 using Spectre.Console;
-using System.Collections.Generic;
+using von_dutch.Managers;
+using von_dutch.Menu;
+using AppContext = von_dutch.Wrappers.AppContext;
 
-namespace von_dutch
+namespace von_dutch.Tasks.Translations
 {
+    /// <summary>
+    /// Класс, представляющий задачу редактирования слова в словаре.
+    /// Наследуется от базового класса TaskCore.
+    /// </summary>
     public class EditWordTask : TaskCore
     {
+        /// <summary>
+        /// Заголовок задачи, отображаемый в интерфейсе.
+        /// </summary>
         public override string Title { get; } = "Редактирование слова";
+
+        /// <summary>
+        /// Флаг, указывающий, требует ли задача данные для выполнения.
+        /// </summary>
         public override bool NeedsData { get; } = true;
 
+        /// <summary>
+        /// Выполняет задачу редактирования слова в словаре.
+        /// </summary>
+        /// <param name="context">Контекст приложения, содержащий необходимые данные и состояние.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Может возникнуть, если контекст или выбранный словарь равны null.
+        /// </exception>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">
+        /// Может возникнуть, если слово не найдено в словаре.
+        /// </exception>
         public override void Execute(AppContext context)
         {
             Dictionary<string, object>? selectedDict = SelectDictionary(context);
@@ -31,7 +54,7 @@ namespace von_dutch
                 return;
             }
 
-            if (!selectedDict.ContainsKey(wordToEdit))
+            if (!selectedDict.TryGetValue(wordToEdit, out object? value1))
             {
                 TerminalUi.DisplayMessageWaiting("Слово не найдено в словаре", Color.Red);
                 return;
@@ -41,7 +64,7 @@ namespace von_dutch
                 new TableColumn("[green]Слово[/]"),
                 new TableColumn("[green]Перевод[/]")
             ], [
-                new List<string> { wordToEdit, TerminalUiExtensions.GetTranslationAsString(selectedDict[wordToEdit]) }
+                new List<string> { wordToEdit, TerminalUiExtensions.GetTranslationAsString(value1) }
             ]);
 
             string choice = AnsiConsole.Prompt(

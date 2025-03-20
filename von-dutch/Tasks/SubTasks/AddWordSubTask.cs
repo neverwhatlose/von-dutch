@@ -1,9 +1,22 @@
 using Spectre.Console;
+using von_dutch.Managers;
+using von_dutch.Menu;
+using AppContext = von_dutch.Wrappers.AppContext;
 
-namespace von_dutch
+namespace von_dutch.Tasks.SubTasks
 {
+    /// <summary>
+    /// Класс, представляющий подзадачу добавления перевода для заданного слова в выбранный словарь.
+    /// </summary>
     public class AddWordSubTask(string originalWord, Dictionary<string, object> selectedDict)
     {
+        /// <summary>
+        /// Выполняет подзадачу добавления перевода для заданного слова.
+        /// </summary>
+        /// <param name="context">Контекст приложения, содержащий необходимые данные и состояние.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Может возникнуть, если контекст или выбранный словарь равны null.
+        /// </exception>
         public void Execute(AppContext context)
         {
             string? translation = TerminalUi.PromptText("Введите перевод для " + originalWord + ":");

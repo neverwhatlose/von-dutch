@@ -1,17 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Speech.Recognition;   
-using System.Speech.Synthesis;     
 using System.Text.Json;
 using Spectre.Console;
+using System.Globalization;
+using von_dutch.Managers;
+using von_dutch.Menu;
+using von_dutch.Tasks.SubTasks;
+using AppContext = von_dutch.Wrappers.AppContext;
 
-namespace von_dutch
+namespace von_dutch.Tasks.Translations
 {
+    /// <summary>
+    /// Класс, представляющий задачу перевода слова с использованием выбранного словаря.
+    /// Наследуется от базового класса TaskCore.
+    /// </summary>
     public class TranslateWordTask : TaskCore
     {
+        /// <summary>
+        /// Заголовок задачи, отображаемый в интерфейсе.
+        /// </summary>
         public override string Title { get; } = "Перевод слова";
+
+        /// <summary>
+        /// Флаг, указывающий, требует ли задача данные для выполнения.
+        /// </summary>
         public override bool NeedsData { get; } = true;
 
+        private CultureInfo? _recognizerCulture;
+
+        /// <summary>
+        /// Выполняет задачу перевода слова с использованием выбранного словаря.
+        /// </summary>
+        /// <param name="context">Контекст приложения, содержащий необходимые данные и состояние.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Может возникнуть, если контекст или выбранный словарь равны null.
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// Может возникнуть при работе с голосовым вводом или озвучиванием текста.
+        /// </exception>
         public override void Execute(AppContext context)
         {
             Console.Clear();
@@ -22,13 +46,19 @@ namespace von_dutch
             {
                 return;
             }
-
-            // Выбор способа ввода слова (голосом или текстом)
+            
+            _recognizerCulture = DetermineCultureByDictionary(selectedDict, context);
+            if (_recognizerCulture == null)
+            {
+                TerminalUi.DisplayMessage("Не удалось определить язык распознавания для выбранного словаря. Использую по умолчанию en-US.", Color.Yellow);
+                _recognizerCulture = new CultureInfo("en-US");
+            }
+            
             bool useVoiceForWord = AnsiConsole.Confirm("[grey]Использовать голосовой ввод слова?[/]");
             string? word;
             if (useVoiceForWord)
             {
-                word = RecognizeSpeech("Скажите слово для перевода...");
+                word = VoiceManager.RecognizeSpeech("Скажите слово для перевода...", _recognizerCulture);
                 if (string.IsNullOrWhiteSpace(word))
                 {
                     TerminalUi.DisplayMessageWaiting("Слово не распознано. Операция отменена.", Color.Red);
@@ -47,7 +77,7 @@ namespace von_dutch
             
             if (selectedDict.TryGetValue(word, out object? translation))
             {
-                string translationText = "";
+                string translationText;
 
                 switch (translation)
                 {
@@ -58,15 +88,11 @@ namespace von_dutch
 
                     case JsonElement { ValueKind: JsonValueKind.Array } jsonElement:
                         {
-                            List<string> translations = new();
-                            foreach (JsonElement element in jsonElement.EnumerateArray())
+                            List<string> translations = [];
+                            foreach (string? tr in jsonElement.EnumerateArray().Select(element => element.GetString()).Where(tr => !string.IsNullOrEmpty(tr)))
                             {
-                                string? tr = element.GetString();
-                                if (!string.IsNullOrEmpty(tr))
-                                {
-                                    translations.Add(tr);
-                                    TerminalUi.DisplayMessage($"Перевод слова: {word} - {tr}", Color.Green);
-                                }
+                                translations.Add(tr!);
+                                TerminalUi.DisplayMessage($"Перевод слова: {word} - {tr}", Color.Green);
                             }
                             translationText = string.Join(", ", translations);
                             break;
@@ -81,8 +107,7 @@ namespace von_dutch
                         TerminalUi.DisplayMessageWaiting("Неподдерживаемый формат перевода", Color.Red);
                         return;
                 }
-
-                // Логируем успешный перевод
+                
                 HistoryManager.Log(
                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     GetDictName(selectedDict, context),
@@ -90,27 +115,26 @@ namespace von_dutch
                     TerminalUiExtensions.GetTranslationAsString(translation),
                     "✅"
                 );
-
-                // Голосовой вывод перевода
+                
                 bool speakTranslation = AnsiConsole.Confirm("[grey]Озвучить перевод?[/]");
                 if (speakTranslation)
                 {
-                    SpeakText($"Перевод слова {word}: {translationText}");
+                    VoiceManager.SpeakText($"Перевод слова {word}: {translationText}");
+                }
+                
+                bool changeTranslation = AnsiConsole.Confirm("[grey]Считаете ли вы нужным отредактировать перевод?[/]");
+                if (!changeTranslation)
+                {
+                    return;
                 }
 
-                // Возможность редактирования перевода
-                bool changeTranslation = AnsiConsole.Confirm("[grey]Считаете ли вы нужным отредактировать перевод?[/]");
-                if (changeTranslation)
-                {
-                    EditTranslationSubTask editTranslationSubTask = new(word, selectedDict);
-                    editTranslationSubTask.Execute(context);
-                }
+                EditTranslationSubTask editTranslationSubTask = new(word, selectedDict);
+                editTranslationSubTask.Execute(context);
             }
             else
             {
                 TerminalUi.DisplayMessage($"Слово {word} не найдено в словаре", Color.Red);
-
-                // Логируем неудачный поиск
+                
                 HistoryManager.Log(
                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     GetDictName(selectedDict, context),
@@ -118,69 +142,39 @@ namespace von_dutch
                     string.Empty,
                     "❌"
                 );
-
-                // Возможность добавить слово в словарь
+                
                 bool addWord = AnsiConsole.Confirm("[grey]Хотите добавить это слово в словарь?[/]");
-                if (addWord)
+                if (!addWord)
                 {
-                    AddWordSubTask addWordSubTask = new(word, selectedDict);
-                    addWordSubTask.Execute(context);
+                    return;
                 }
+
+                AddWordSubTask addWordSubTask = new(word, selectedDict);
+                addWordSubTask.Execute(context);
             }
         }
-
+        
         /// <summary>
-        /// Распознавание речи через System.Speech.Recognition.
+        /// Определяет культуру распознавания речи на основе имени словаря.
         /// </summary>
-        private string RecognizeSpeech(string prompt)
+        /// <param name="dict">Выбранный словарь.</param>
+        /// <param name="context">Контекст приложения.</param>
+        /// <returns>Объект CultureInfo, соответствующий языку словаря, или null, если язык не определен.</returns>
+        private CultureInfo? DetermineCultureByDictionary(Dictionary<string, object> dict, AppContext context)
         {
-            TerminalUi.DisplayMessage(prompt, Color.Yellow);
-            string recognizedText = "";
+            string dictName = GetDictName(dict, context).ToLower();
 
-            using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine())
+            if (dictName.Contains("en-ru"))
             {
-                try
-                {
-                    recognizer.SetInputToDefaultAudioDevice();
-                    recognizer.LoadGrammar(new DictationGrammar());
-
-                    recognizer.SpeechRecognized += (sender, e) =>
-                    {
-                        recognizedText = e.Result.Text;
-                    };
-
-                    recognizer.RecognizeAsync(RecognizeMode.Single);
-                    System.Threading.Thread.Sleep(5000);  // Простая задержка для ожидания распознавания
-                    recognizer.RecognizeAsyncStop();
-                }
-                catch (Exception ex)
-                {
-                    TerminalUi.DisplayMessage($"Ошибка распознавания: {ex.Message}", Color.Red);
-                }
+                return new CultureInfo("en-US");
             }
-
-            TerminalUi.DisplayMessage($"Распознано: {recognizedText}", Color.Green);
-            return recognizedText.Trim();
-        }
-
-        /// <summary>
-        /// Голосовой вывод перевода через System.Speech.Synthesis.
-        /// </summary>
-        private void SpeakText(string textToSpeak)
-        {
-            try
+            
+            if (dictName.Contains("fr-ru"))
             {
-                using (SpeechSynthesizer synth = new SpeechSynthesizer())
-                {
-                    synth.Volume = 100;
-                    synth.Rate = 0;
-                    synth.Speak(textToSpeak);
-                }
+                return new CultureInfo("fr-FR");
             }
-            catch (Exception ex)
-            {
-                TerminalUi.DisplayMessage($"Ошибка синтеза речи: {ex.Message}", Color.Red);
-            }
+            
+            return dictName.Contains("es-en") ? new CultureInfo("es-ES") : null;
         }
     }
 }

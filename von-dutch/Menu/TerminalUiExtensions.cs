@@ -1,10 +1,25 @@
 using System.Text;
 using System.Text.Json;
 
-namespace von_dutch
+namespace von_dutch.Menu
 {
+    /// <summary>
+    /// Статический класс, предоставляющий методы расширения для работы с интерфейсом терминала.
+    /// </summary>
     public static class TerminalUiExtensions
     {
+        /// <summary>
+        /// Преобразует входное значение в строку перевода, учитывая различные типы данных.
+        /// </summary>
+        /// <param name="value">Входное значение, которое необходимо преобразовать в строку.</param>
+        /// <returns>
+        /// Возвращает строковое представление входного значения. 
+        /// Если значение является массивом JSON, элементы массива объединяются через запятую.
+        /// Если значение не может быть преобразовано, возвращается пустая строка.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// Может возникнуть, если входное значение или его компоненты равны null.
+        /// </exception>
         public static string GetTranslationAsString(object value)
         {
             string result;

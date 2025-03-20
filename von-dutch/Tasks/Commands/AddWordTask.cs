@@ -1,12 +1,33 @@
 using Spectre.Console;
+using von_dutch.Managers;
+using von_dutch.Menu;
+using AppContext = von_dutch.Wrappers.AppContext;
 
-namespace von_dutch
+namespace von_dutch.Tasks.Commands
 {
+    /// <summary>
+    /// Класс, представляющий задачу добавления нового слова в словарь приложения.
+    /// Наследуется от базового класса TaskCore.
+    /// </summary>
     public class AddWordTask : TaskCore
     {
+        /// <summary>
+        /// Заголовок задачи, отображаемый в интерфейсе.
+        /// </summary>
         public override string Title { get; } = "Добавить новое слово";
+
+        /// <summary>
+        /// Флаг, указывающий, требует ли задача данные для выполнения.
+        /// </summary>
         public override bool NeedsData { get; } = true;
 
+        /// <summary>
+        /// Выполняет задачу добавления нового слова в словарь.
+        /// </summary>
+        /// <param name="context">Контекст приложения, содержащий необходимые данные и состояние.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Может возникнуть, если контекст или выбранный словарь равны null.
+        /// </exception>
         public override void Execute(AppContext context)
         {
             Dictionary<string, object>? selectedDict = SelectDictionary(context);

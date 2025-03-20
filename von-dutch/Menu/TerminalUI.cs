@@ -1,10 +1,19 @@
 using System.Text;
 using Spectre.Console;
+using von_dutch.Tasks;
 
-namespace von_dutch
+namespace von_dutch.Menu
 {
+    /// <summary>
+    /// Предоставляет методы для взаимодействия с пользователем через терминал.
+    /// </summary>
     public static class TerminalUi
     {
+        /// <summary>
+        /// Отображает главное меню и позволяет пользователю выбрать задачу.
+        /// </summary>
+        /// <param name="tasks">Список задач для отображения в меню.</param>
+        /// <returns>Выбранная задача.</returns>
         public static TaskCore ShowMainMenu(List<TaskCore> tasks)
         {
             Console.Clear();
@@ -28,6 +37,11 @@ namespace von_dutch
             return selectedTask;
         }
 
+        /// <summary>
+        /// Запрашивает у пользователя ввод текста.
+        /// </summary>
+        /// <param name="promptText">Текст подсказки для пользователя.</param>
+        /// <returns>Введенный текст или null, если пользователь нажал Escape.</returns>
         public static string? PromptText(string promptText)
         {
             AnsiConsole.MarkupLine("[grey]" + promptText + "[/]");
@@ -67,20 +81,33 @@ namespace von_dutch
             return input.ToString();
         }
 
+        /// <summary>
+        /// Отображает сообщение и ожидает нажатия клавиши пользователем.
+        /// </summary>
+        /// <param name="message">Текст сообщения.</param>
+        /// <param name="messageColor">Цвет текста сообщения.</param>
         public static void DisplayMessageWaiting(string message, Color messageColor)
         {
             AnsiConsole.MarkupLine($"[{messageColor.ToString().ToLower()}]{message}[/]");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Отображает сообщение без ожидания.
+        /// </summary>
+        /// <param name="message">Текст сообщения.</param>
+        /// <param name="messageColor">Цвет текста сообщения.</param>
         public static void DisplayMessage(string message, Color messageColor)
         {
             AnsiConsole.MarkupLine($"[{messageColor.ToString().ToLower()}]{message}[/]");
         }
 
         /// <summary>
-        /// Универсальный метод для ленивого создания и вывода таблицы.
+        /// Отображает таблицу с заданными заголовками и строками.
         /// </summary>
+        /// <param name="tableTitle">Заголовок таблицы.</param>
+        /// <param name="columns">Список колонок таблицы.</param>
+        /// <param name="rows">Список строк таблицы.</param>
         public static void PrintTable(string tableTitle, List<TableColumn> columns, List<List<string>> rows)
         {
             Table table = new()
@@ -102,10 +129,12 @@ namespace von_dutch
         }
 
         /// <summary>
-        /// Универсальный метод для вывода таблицы с пагинацией.
-        /// Принимает заголовок таблицы, список названий колонок, все строки таблицы и размер страницы.
-        /// Пользователь может переключаться между страницами с помощью стрелок и выйти нажатием Esc.
+        /// Отображает таблицу с постраничной навигацией.
         /// </summary>
+        /// <param name="tableTitle">Заголовок таблицы.</param>
+        /// <param name="columns">Список колонок таблицы.</param>
+        /// <param name="rows">Список строк таблицы.</param>
+        /// <param name="pageSize">Количество строк на одной странице.</param>
         public static void PrintPaginatedTable(string tableTitle, List<TableColumn> columns, List<List<string>> rows,
             int pageSize)
         {

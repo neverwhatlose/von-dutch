@@ -2,9 +2,13 @@ using Spectre.Console;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using von_dutch.Menu;
 
-namespace von_dutch
+namespace von_dutch.Managers
 {
+    /// <summary>
+    /// Менеджер для работы с моделью GigaChat.
+    /// </summary>
     public class GigaChatAiService
     {
         private readonly string _accessToken;
@@ -29,7 +33,13 @@ namespace von_dutch
 
             Console.WriteLine("Не удалось получить токен доступа. Завершение.");
         }
-        
+
+        /// <summary>
+        /// Переводит предложение с английского на русский с использованием GigaChat.
+        /// </summary>
+        /// <param name="englishSentence">Предложение на английском языке для перевода.</param>
+        /// <returns>Переведенное предложение на русском языке или сообщение об ошибке.</returns>
+        /// <exception cref="HttpRequestException">Выбрасывается, если произошла ошибка при запросе к GigaChat.</exception>
         public async Task<string> TranslateSentence(string englishSentence)
         {
             if (string.IsNullOrWhiteSpace(englishSentence))
@@ -57,7 +67,14 @@ namespace von_dutch
             string responseJson = await CallGigaChatAsync(requestBody);
             return ExtractAssistantContent(responseJson);
         }
-        
+
+        /// <summary>
+        /// Переводит слово или фразу в контексте предложения с использованием GigaChat.
+        /// </summary>
+        /// <param name="sentence">Предложение, содержащее слово или фразу для перевода.</param>
+        /// <param name="word">Слово или фраза для перевода.</param>
+        /// <returns>Переведенное слово или фраза на русском языке или сообщение об ошибке.</returns>
+        /// <exception cref="HttpRequestException">Выбрасывается, если произошла ошибка при запросе к GigaChat.</exception>
         public async Task<string> TranslateWordWithContext(string sentence, string word)
         {
             if (string.IsNullOrWhiteSpace(sentence))
@@ -113,7 +130,13 @@ namespace von_dutch
             string responseJson = await CallGigaChatAsync(requestBody);
             return ExtractAssistantContent(responseJson);
         }
-        
+
+        /// <summary>
+        /// Выполняет запрос к GigaChat API.
+        /// </summary>
+        /// <param name="requestBody">Тело запроса в формате JSON.</param>
+        /// <returns>Ответ от GigaChat в формате JSON.</returns>
+        /// <exception cref="HttpRequestException">Выбрасывается, если произошла ошибка при запросе к GigaChat.</exception>
         private async Task<string> CallGigaChatAsync(string requestBody)
         {
             using HttpClient client = CreateHttpClient();
@@ -128,12 +151,17 @@ namespace von_dutch
                 return responseJson;
             }
             
-            //TODO: integrate with TerminalUi
             TerminalUi.DisplayMessageWaiting($"Ошибка при вызове GigaChat: {response.StatusCode}", Color.Red);
 
             return responseJson;
         }
-        
+
+        /// <summary>
+        /// Извлекает содержимое ответа от GigaChat.
+        /// </summary>
+        /// <param name="responseJson">Ответ от GigaChat в формате JSON.</param>
+        /// <returns>Содержимое ответа или сообщение об ошибке.</returns>
+        /// <exception cref="JsonException">Выбрасывается, если произошла ошибка при парсинге JSON.</exception>
         private static string ExtractAssistantContent(string responseJson)
         {
             try
@@ -159,12 +187,15 @@ namespace von_dutch
                 return "Ошибка при парсинге ответа: " + ex.Message;
             }
         }
-        
+
+        /// <summary>
+        /// Создает HttpClient с настройками для работы с GigaChat API.
+        /// </summary>
+        /// <returns>Настроенный экземпляр HttpClient.</returns>
         private HttpClient CreateHttpClient()
         {
             HttpClientHandler handler = new ()
             {
-                // Игнорируем SSL-ошибки
                 ServerCertificateCustomValidationCallback = (_, _, _, _) => true
             };
 
@@ -174,7 +205,13 @@ namespace von_dutch
 
             return client;
         }
-        
+
+        /// <summary>
+        /// Получает токен доступа для работы с GigaChat API.
+        /// </summary>
+        /// <returns>Токен доступа или пустая строка, если токен не удалось получить.</returns>
+        /// <exception cref="HttpRequestException">Выбрасывается, если произошла ошибка при запросе токена.</exception>
+        /// <exception cref="JsonException">Выбрасывается, если произошла ошибка при парсинге JSON.</exception>
         private static async Task<string> GetBearerTokenAsync()
         {
             HttpClientHandler handler = new ()
@@ -213,7 +250,10 @@ namespace von_dutch
                     return tokenProp.GetString() ?? string.Empty;
                 }
             }
-            catch { /* ignore */ }
+            catch
+            {
+                TerminalUi.DisplayMessageWaiting("Ошибка при парсинге токена", Color.Red);
+            }
 
             return string.Empty;
         }
