@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Speech.Recognition;   
+using System.Speech.Synthesis;     
 using System.Text.Json;
 using Spectre.Console;
 
@@ -14,79 +18,99 @@ namespace von_dutch
             AnsiConsole.Write(new FigletText("VON DUTCH").LeftJustified().Color(Color.Blue));
 
             Dictionary<string, object>? selectedDict = SelectDictionary(context);
-            
             if (selectedDict == null)
             {
                 return;
             }
-            
-            string? word = TerminalUi.PromptText("[green]Введите слово для перевода[/]");
-            
-            if (word == null)
-            {
-                TerminalUi.DisplayMessageWaiting("Операция отменена.", Color.Yellow);
-                return;
-            }
-            if (word.Trim().Length == 0)
-            {
-                TerminalUi.DisplayMessageWaiting("Слово не может быть пустым", Color.Red);
-                return;
-            }
-            
 
+            // Выбор способа ввода слова (голосом или текстом)
+            bool useVoiceForWord = AnsiConsole.Confirm("[grey]Использовать голосовой ввод слова?[/]");
+            string? word;
+            if (useVoiceForWord)
+            {
+                word = RecognizeSpeech("Скажите слово для перевода...");
+                if (string.IsNullOrWhiteSpace(word))
+                {
+                    TerminalUi.DisplayMessageWaiting("Слово не распознано. Операция отменена.", Color.Red);
+                    return;
+                }
+            }
+            else
+            {
+                word = TerminalUi.PromptText("[green]Введите слово для перевода:[/]");
+                if (string.IsNullOrWhiteSpace(word))
+                {
+                    TerminalUi.DisplayMessageWaiting("Слово не может быть пустым", Color.Red);
+                    return;
+                }
+            }
+            
             if (selectedDict.TryGetValue(word, out object? translation))
             {
+                string translationText = "";
+
                 switch (translation)
                 {
                     case string value:
-                        TerminalUi.DisplayMessage($"Перевод слова: {word} - " + value, Color.Green);
+                        translationText = value;
+                        TerminalUi.DisplayMessage($"Перевод слова: {word} - {value}", Color.Green);
                         break;
+
                     case JsonElement { ValueKind: JsonValueKind.Array } jsonElement:
                         {
+                            List<string> translations = new();
                             foreach (JsonElement element in jsonElement.EnumerateArray())
                             {
-                                TerminalUi.DisplayMessage($"Перевод слова: {word} - " + element.GetString(), Color.Green);
+                                string? tr = element.GetString();
+                                if (!string.IsNullOrEmpty(tr))
+                                {
+                                    translations.Add(tr);
+                                    TerminalUi.DisplayMessage($"Перевод слова: {word} - {tr}", Color.Green);
+                                }
                             }
-
+                            translationText = string.Join(", ", translations);
                             break;
                         }
+
                     case JsonElement element1:
-                        TerminalUi.DisplayMessage($"Перевод слова: {word} - " + element1.GetString(), Color.Green);
+                        translationText = element1.GetString() ?? "Ошибка перевода";
+                        TerminalUi.DisplayMessage($"Перевод слова: {word} - {translationText}", Color.Green);
                         break;
+
                     default:
                         TerminalUi.DisplayMessageWaiting("Неподдерживаемый формат перевода", Color.Red);
-                        break;
+                        return;
                 }
-                
+
+                // Логируем успешный перевод
                 HistoryManager.Log(
                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     GetDictName(selectedDict, context),
                     word,
                     TerminalUiExtensions.GetTranslationAsString(translation),
                     "✅"
-                    );
-                
-                bool changeTranslation = AnsiConsole.Prompt(
-                    new SelectionPrompt<bool>()
-                        .Title("[grey]Считаете ли вы нужным отредактировать перевод?[/]")
-                        .HighlightStyle(new Style(foreground: Color.Green))
-                        .MoreChoicesText("[grey](Используйте стрелки для выбора)[/]")
-                        .AddChoices(true, false)
-                        .UseConverter(value => value ? "Да" : "Нет")
                 );
-                
-                if (!changeTranslation)
+
+                // Голосовой вывод перевода
+                bool speakTranslation = AnsiConsole.Confirm("[grey]Озвучить перевод?[/]");
+                if (speakTranslation)
                 {
-                    return;
+                    SpeakText($"Перевод слова {word}: {translationText}");
                 }
 
-                EditTranslationSubTask editTranslationSubTask = new(word, selectedDict);
-                editTranslationSubTask.Execute(context);
+                // Возможность редактирования перевода
+                bool changeTranslation = AnsiConsole.Confirm("[grey]Считаете ли вы нужным отредактировать перевод?[/]");
+                if (changeTranslation)
+                {
+                    EditTranslationSubTask editTranslationSubTask = new(word, selectedDict);
+                    editTranslationSubTask.Execute(context);
+                }
             }
             else
             {
-                TerminalUi.DisplayMessage("Слово " + word + " не найдено в словаре", Color.Red);
-                
+                TerminalUi.DisplayMessage($"Слово {word} не найдено в словаре", Color.Red);
+
+                // Логируем неудачный поиск
                 HistoryManager.Log(
                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     GetDictName(selectedDict, context),
@@ -94,23 +118,68 @@ namespace von_dutch
                     string.Empty,
                     "❌"
                 );
-                
-                bool changeTranslation = AnsiConsole.Prompt(
-                    new SelectionPrompt<bool>()
-                        .Title("[grey]Хотите добавить это слово в словарь?[/]")
-                        .HighlightStyle(new Style(foreground: Color.Green))
-                        .MoreChoicesText("[grey](Используйте стрелки для выбора)[/]")
-                        .AddChoices(true, false)
-                        .UseConverter(value => value ? "Да" : "Нет")
-                );
 
-                if (!changeTranslation)
+                // Возможность добавить слово в словарь
+                bool addWord = AnsiConsole.Confirm("[grey]Хотите добавить это слово в словарь?[/]");
+                if (addWord)
                 {
-                    return;
+                    AddWordSubTask addWordSubTask = new(word, selectedDict);
+                    addWordSubTask.Execute(context);
                 }
+            }
+        }
 
-                AddWordSubTask addWordSubTask = new(word, selectedDict);
-                addWordSubTask.Execute(context);
+        /// <summary>
+        /// Распознавание речи через System.Speech.Recognition.
+        /// </summary>
+        private string RecognizeSpeech(string prompt)
+        {
+            TerminalUi.DisplayMessage(prompt, Color.Yellow);
+            string recognizedText = "";
+
+            using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine())
+            {
+                try
+                {
+                    recognizer.SetInputToDefaultAudioDevice();
+                    recognizer.LoadGrammar(new DictationGrammar());
+
+                    recognizer.SpeechRecognized += (sender, e) =>
+                    {
+                        recognizedText = e.Result.Text;
+                    };
+
+                    recognizer.RecognizeAsync(RecognizeMode.Single);
+                    System.Threading.Thread.Sleep(5000);  // Простая задержка для ожидания распознавания
+                    recognizer.RecognizeAsyncStop();
+                }
+                catch (Exception ex)
+                {
+                    TerminalUi.DisplayMessage($"Ошибка распознавания: {ex.Message}", Color.Red);
+                }
+            }
+
+            TerminalUi.DisplayMessage($"Распознано: {recognizedText}", Color.Green);
+            return recognizedText.Trim();
+        }
+
+        /// <summary>
+        /// Голосовой вывод перевода через System.Speech.Synthesis.
+        /// </summary>
+        private void SpeakText(string textToSpeak)
+        {
+            try
+            {
+                using (SpeechSynthesizer synth = new SpeechSynthesizer())
+                {
+                    synth.Volume = 100;
+                    synth.Rate = 0;
+                    synth.Speak(textToSpeak);
+                }
+            }
+            catch (Exception ex)
+            {
+                TerminalUi.DisplayMessage($"Ошибка синтеза речи: {ex.Message}", Color.Red);
             }
         }
     }
